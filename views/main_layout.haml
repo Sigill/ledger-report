@@ -1,0 +1,35 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=utf-8", "http-equiv" => "Content-Type"}/
+    %meta{:content => "IE=edge", "http-equiv" => "X-UA-Compatible"}/
+    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
+    %title Ledger
+    - @stylesheets.each do |s|
+      %link{:href => s, :rel => "stylesheet"}/
+    / HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
+    / WARNING: Respond.js doesn't work if you view the page via file://
+    /[if lt IE 9]
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    - @scripts.each do |s|
+      %script{:src => s }
+  %body
+    %nav.navbar.navbar-inverse.navbar-static-top
+      .container
+        .navbar-header
+          %button.navbar-toggle.collapsed{type: "button", "data-toggle" => "collapse", "data-target" => "#navbar", "aria-expanded" => "false", "aria-controls" => "navbar"}
+            %span.sr-only Toggle navigation
+            %span.icon-bar
+            %span.icon-bar
+            %span.icon-bar
+          %a.navbar-brand{href: url('/')} Ledger
+        .collapse.navbar-collapse#navbar
+          %ul.nav.navbar-nav
+            %li.active<
+              %a{href: url("/")} #{settings.assets}
+            %li<
+              %a{href: url("/account/#{settings.expenses}")} #{settings.expenses}
+    .container-fluid
+      = yield
+

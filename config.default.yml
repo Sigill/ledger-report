@@ -1,0 +1,8 @@
+ledger_cmd: ledger
+ledger_file: accounts.ledger
+assets: Assets
+expenses: Expenses
+currency: $
+decimal_sep: "."
+thousand_sep: ","
+money_format: "%u%n"

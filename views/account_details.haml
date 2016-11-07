@@ -1,0 +1,41 @@
+.row
+  .col-xs-12.col-md-8.col-md-offset-2.page-header
+    %h1.text-center #{account_title}
+
+%div.row
+  %div.col-md-4
+    = haml :treegrid_account, :locals => {:summary => summary}
+  %div.col-md-8.accounts_variations
+
+:javascript
+  $(document).ready(function() {
+    $('.tree').treegrid();
+  });
+
+  $('.accounts_variations').highcharts({
+    chart: { type: 'column' },
+    title: { text: 'Variations mensuelles' },
+    xAxis: {
+      type: 'datetime',
+      dateTimeLabelFormats: { day: '%b %Y', month: '%b %Y', year: '%b %Y' },
+      title: { text: 'Date' }
+    },
+    yAxis: {
+      title: { text: null },
+    },
+    tooltip: {
+      headerFormat: '<b>{series.name}</b><br>',
+      pointFormat: '{point.x:%b %Y}: {point.y:.2f} #{settings.currency}'
+    },
+
+    plotOptions: {
+     spline: {
+       marker: {
+         enabled: true
+       }
+      }
+    },
+    series: [
+      #{highcharts_series(variations)}
+    ]
+  });

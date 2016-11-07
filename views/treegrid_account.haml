@@ -1,0 +1,11 @@
+%table.table.tree.table-striped.table-condensed
+  - treegrid_parents = {}
+  - summary.each_with_index do |a, i|
+    - treegrid_parents[a[:level]] = i
+    - cls = ["treegrid-#{i}"]
+    - if a[:level] > 0
+      - cls.push "treegrid-parent-#{treegrid_parents[a[:level] - 1]}"
+    %tr{:class => cls}<
+      %td<
+        %a{href: url("/account/#{a[:fullname]}")} #{a[:name]}
+      %td.money> #{money(a[:amount])}
