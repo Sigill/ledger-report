@@ -53,6 +53,7 @@ helpers do
             puts "Caching journal"
             cmd = [settings.ledger_cmd, "-f", settings.ledger_file, "csv"].shelljoin
             stdout, stdeerr, status = Open3.capture3(cmd)
+            stdout.force_encoding("UTF-8")
             Cache.cache(:journal, Journal::from_csv(stdout), @journal_current_hash)
         end
 
