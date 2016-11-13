@@ -21,6 +21,8 @@ include ActionView::Helpers::NumberHelper
 require_relative 'journal'
 require_relative 'cache'
 
+set :logging, false
+
 config_file 'config.yml'
 
 set :server, 'thin'
