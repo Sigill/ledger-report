@@ -1,8 +1,20 @@
-ledger_cmd: ledger
-ledger_file: accounts.ledger
+ledger_cmd: /usr/bin/ledger
+# Your accounts
+ledger_file: /home/cyrille/Documents/comptes/comptes.ledger
+
 assets: Assets
 expenses: Expenses
+
+# For translations
+locale: en
+
+# Properly display values
+decimals: 2
 currency: $
 decimal_sep: "."
 thousand_sep: ","
-money_format: "%u%n"
+currency_format: "%u%n"
+
+# For HighCharts
+value_prefix: ''
+value_suffix: '$'

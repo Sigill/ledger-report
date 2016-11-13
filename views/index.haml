@@ -1,6 +1,6 @@
 .row
   .col-xs-12.col-md-8.col-md-offset-2.page-header
-    %h1.text-center #{account_title}
+    %h1.text-center #{h account_title}
 
 %div.row
   %div.col-md-4
@@ -8,43 +8,41 @@
 
   %div.col-md-8.accounts_balances
 
+= haml :highcharts_global
+
 :javascript
-    $(document).ready(function() {
-      $('.tree').treegrid();
+  $(document).ready(function() {
+    $('.tree').treegrid();
 
-      $('#balances-tabs a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show')
-      })
-    });
+    $('.accounts_balances').highcharts({
+      chart: { type: 'spline' },
+      title: { text: '#{t 'text.balance'}' },
+      credits: { enabled: false },
+      xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: { day: '#{t 'date.formats.month_and_year'}', month: '#{t 'date.formats.month_and_year'}', year: '#{t 'date.formats.month_and_year'}' },
+        title: { text: null }
+      },
+      yAxis: {
+        title: { text: null }
+      },
+      tooltip: {
+        headerFormat: '<b>{series.name}</b><br>',
+        valueDecimals: #{settings.decimals},
+        valuePrefix: '#{h settings.value_prefix}',
+        valueSuffix: '#{h settings.value_suffix}',
+        pointFormat: '{point.x:#{t 'date.formats.month_and_year'}}#{t 'text.punct_sep'}: {point.y}'
+      },
 
-    $(function () {
-      $('.accounts_balances').highcharts({
-        chart: { type: 'spline' },
-        title: { text: 'Relevés mensuels' },
-        xAxis: {
-          type: 'datetime',
-          dateTimeLabelFormats: { month: '%b %Y', year: '%b %Y' },
-          title: { text: 'Date' }
-        },
-        yAxis: {
-          title: { text: null },
-          min: 0
-        },
-        tooltip: {
-          headerFormat: '<b>{series.name}</b><br>',
-          pointFormat: '{point.x:%e %b %Y}: {point.y:.2f} #{settings.currency}'
-        },
-
-        plotOptions: {
-          spline: {
-            marker: {
-              enabled: true
-            }
+      plotOptions: {
+        spline: {
+          marker: {
+            enabled: true
           }
-        },
-        series: [
-          #{highcharts_series(balances)}
-        ]
-      });
+        }
+      },
+      series: [
+        #{highcharts_series(balances)}
+      ]
     });
+  });

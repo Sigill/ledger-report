@@ -1,0 +1,26 @@
+en:
+  text:
+    account: account
+    assets: Assets
+    expenses: Expenses
+    balance: Balance
+    cash_flow: Cash flow
+    punct_sep: ''
+  date:
+    formats:
+      long: '%b %e, %Y'
+      month_and_year: '%b %Y'
+    abbr_month_names:
+    - 
+    - Jan
+    - Feb
+    - Mar
+    - Apr
+    - May
+    - Jun
+    - Jul
+    - Aug
+    - Sep
+    - Oct
+    - Nov
+    - Dec

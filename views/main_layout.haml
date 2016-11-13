@@ -27,9 +27,9 @@
         .collapse.navbar-collapse#navbar
           %ul.nav.navbar-nav
             %li.active<
-              %a{href: url("/")} #{settings.assets}
+              %a{href: url("/")} #{t 'text.assets'}
             %li<
-              %a{href: url("/account/#{settings.expenses}")} #{settings.expenses}
+              %a{href: url("/#{t 'text.account'}/#{settings.expenses}")} #{t 'text.expenses'}
     .container-fluid
       = yield
 

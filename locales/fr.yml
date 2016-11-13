@@ -1,0 +1,26 @@
+fr:
+  text:
+    account: compte
+    assets: Actifs
+    expenses: Dépenses
+    balance: Balance
+    cash_flow: Variations mensuelles
+    punct_sep: '\u00A0'
+  date:
+    formats:
+      long: '%e %b %Y'
+      month_and_year: '%b %Y'
+    abbr_month_names:
+    - 
+    - Janv.
+    - Févr.
+    - Mars
+    - Avril
+    - Mai
+    - Juin
+    - Juil.
+    - Août
+    - Sept.
+    - Oct.
+    - Nov.
+    - Déc.

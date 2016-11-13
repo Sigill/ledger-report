@@ -1,0 +1,10 @@
+:javascript
+  $(document).ready(function() {
+    Highcharts.setOptions({
+        lang: {
+          decimalPoint: '#{settings.decimal_sep}',
+          thousandsSep: '#{settings.thousand_sep}',
+          shortMonths: #{abbr_month_list}
+        }
+    });
+  });

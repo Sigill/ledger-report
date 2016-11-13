@@ -1,41 +1,47 @@
 .row
   .col-xs-12.col-md-8.col-md-offset-2.page-header
-    %h1.text-center #{account_title}
+    %h1.text-center #{h account_title}
 
 %div.row
   %div.col-md-4
     = haml :treegrid_account, :locals => {:summary => summary}
   %div.col-md-8.accounts_variations
 
+= haml :highcharts_global
+
 :javascript
   $(document).ready(function() {
     $('.tree').treegrid();
-  });
 
-  $('.accounts_variations').highcharts({
-    chart: { type: 'column' },
-    title: { text: 'Variations mensuelles' },
-    xAxis: {
-      type: 'datetime',
-      dateTimeLabelFormats: { day: '%b %Y', month: '%b %Y', year: '%b %Y' },
-      title: { text: 'Date' }
-    },
-    yAxis: {
-      title: { text: null },
-    },
-    tooltip: {
-      headerFormat: '<b>{series.name}</b><br>',
-      pointFormat: '{point.x:%b %Y}: {point.y:.2f} #{settings.currency}'
-    },
-
-    plotOptions: {
-     spline: {
-       marker: {
-         enabled: true
-       }
-      }
-    },
-    series: [
-      #{highcharts_series(variations)}
-    ]
+    $('.accounts_variations').highcharts({
+      chart: { type: 'column' },
+      title: { text: '#{t 'text.cash_flow'}' },
+      credits: { enabled: false },
+      xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: { day: '#{t 'date.formats.month_and_year'}', month: '#{t 'date.formats.month_and_year'}', year: '#{t 'date.formats.month_and_year'}' },
+        title: { text: null }
+      },
+      yAxis: {
+        title: { text: null },
+      },
+      tooltip: {
+        headerFormat: '<b>{series.name}</b><br>',
+        valueDecimals: #{settings.decimals},
+        valuePrefix: '#{h settings.value_prefix}',
+        valueSuffix: '#{h settings.value_suffix}',
+        pointFormat: '{point.x:#{t 'date.formats.long'}}#{t 'text.punct_sep'}: {point.y}'
+      },
+      legend: { enabled: false },
+      plotOptions: {
+        spline: {
+          marker: {
+            enabled: true
+          }
+        }
+      },
+      series: [
+        #{highcharts_series(variations)}
+      ]
+    });
   });
