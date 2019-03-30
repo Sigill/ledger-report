@@ -9,6 +9,6 @@ gem 'actionview', '~> 5.2.3'
 gem 'i18n', '~> 0.7'
 
 group :development do
-	gem 'byebug', '9.0.6'
-	gem 'rerun', '0.10.0'
+	gem 'byebug'
+	gem 'rerun'
 end
