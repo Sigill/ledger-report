@@ -39,11 +39,11 @@ before do
 
     @journal_current_hash = Digest::MD5.file settings.ledger_file
 
-    @stylesheets = ["//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css",
+    @stylesheets = ["//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css",
                     url("style.css"),
                     url("css/jquery.treegrid.css")]
-    @scripts = ["https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js",
-                "//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js",
+    @scripts = ["https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js",
+                "//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js",
                 url("js/jquery.treegrid.min.js"),
                 url("js/jquery.treegrid.bootstrap3.js"),
                 url("js/highcharts.js")]
