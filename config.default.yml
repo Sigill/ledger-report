@@ -1,6 +1,6 @@
 ledger_cmd: /usr/bin/ledger
 # Your accounts
-ledger_file: /home/cyrille/Documents/comptes/comptes.ledger
+ledger_file: /path/to/your/account.ledger
 
 assets: Assets
 expenses: Expenses
@@ -14,6 +14,7 @@ currency: $
 decimal_sep: "."
 thousand_sep: ","
 currency_format: "%u%n"
+date_format: "%m/%d/%Y"
 
 # For HighCharts
 value_prefix: ''
