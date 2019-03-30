@@ -22,6 +22,12 @@ Only the `en` and `fr` locales are currently supported (but others can easily be
 $ ruby application.rb -o 0.0.0.0
 ```
 
+Or
+
+```
+$ rerun "ruby application.rb -o 0.0.0.0"
+```
+
 Open `http://0.0.0.0:4567` in your browser.
 
 ## License
