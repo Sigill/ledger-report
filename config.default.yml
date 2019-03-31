@@ -17,6 +17,7 @@ decimal_sep: "."
 thousand_sep: ","
 currency_format: "%u%n"
 date_format: "%m/%d/%Y"
+month_year_format: "%B %Y"
 
 # For HighCharts
 value_prefix: ''

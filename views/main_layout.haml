@@ -29,9 +29,9 @@
             %li<
               %a{href: url("/")} #{t 'text.assets'}
             %li<
-              %a{href: url("/#{t 'text.account'}/#{settings.incomes}")} #{t 'text.incomes'}
+              %a{href: url("/account/#{settings.incomes}")} #{t 'text.incomes'}
             %li<
-              %a{href: url("/#{t 'text.account'}/#{settings.expenses}")} #{t 'text.expenses'}
+              %a{href: url("/account/#{settings.expenses}")} #{t 'text.expenses'}
     .container-fluid
       = yield
 

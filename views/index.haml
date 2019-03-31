@@ -4,13 +4,21 @@
 
 .row
   .col-md-4
-    = haml :treegrid_account, :locals => {:summary => summary}
+    = haml :treegrid_account, :locals => {summary: summary, page: 'account'}
 
   .col-md-8
     .row
       .accounts_balances
+    %hr
     .row
       .accounts_variations
+    %hr
+    .row
+      %p.text-center.lead= t('text.transactions').capitalize
+      = haml :transactions_table, :locals => {monthly_register: monthly_register, account: account}
+      %p.text-center<
+        %a{href: url("/#{t 'text.transactions'}/#{h(account)}")}<
+          %span.glyphicon.glyphicon-plus
 
 = haml :highcharts_global
 

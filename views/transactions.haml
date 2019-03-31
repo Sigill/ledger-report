@@ -1,0 +1,15 @@
+.row
+  .col-xs-12.col-md-8.col-md-offset-2.page-header
+    %h1.text-center #{h account}
+
+.row
+  .col-md-4
+    = haml :treegrid_account, :locals => {summary: summary, page: 'transactions'}
+
+  .col-md-8
+    = haml :transactions_table, :locals => {monthly_register: monthly_register, account: account}
+
+:javascript
+  $(document).ready(function() {
+    $('.tree').treegrid();
+  });

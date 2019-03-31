@@ -6,6 +6,10 @@ en:
     incomes: Incomes
     balance: Balance
     cash_flow: Cash flow
+    date: date
+    description: description
+    amount: amount
+    transactions: transactions
     punct_sep: ''
   date:
     formats:

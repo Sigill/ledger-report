@@ -6,6 +6,10 @@ fr:
     incomes: Recettes
     balance: Balance
     cash_flow: Variations mensuelles
+    date: date
+    amount: montant
+    description: description
+    transactions: transactions
     punct_sep: '\u00A0'
   date:
     formats:

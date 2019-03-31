@@ -94,16 +94,15 @@ class Journal
         register
     end
 
-    def monthly_subtotals
-        monthly_register.map { |m, transactions|
-            [m, transactions.inject(0) { |sum, tr| sum + tr['amount'] }]
+    def monthly_subtotals(_monthly_register = monthly_register())
+        _monthly_register.map { |m, transactions|
+            [m, transactions.sum { |tr| tr['amount'] }]
         }
     end
 
-    def monthly_balances
-        monthly = monthly_subtotals
-        months = monthly.map { |s| next_month(s[0]) }
-        balances = monthly.map { |s| s[1]}.cumulative_sum
+    def monthly_balances(_monthly_subtotals = monthly_subtotals())
+        months = _monthly_subtotals.map { |s| next_month(s[0]) }
+        balances = _monthly_subtotals.map { |s| s[1] }.cumulative_sum
         months.zip(balances)
     end
 

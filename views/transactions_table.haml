@@ -1,0 +1,25 @@
+.transactions
+  %table.table.table-condensed.table-hover
+    - monthly_register.reverse_each do |date, register|
+      %thead<
+        %tr<
+          %th.text-center{colspan: 4}= date.strftime(settings.month_year_format)
+      %thead<
+        %tr<
+          %th= t('text.date').capitalize
+          %th= t('text.description').capitalize
+          %th= t('text.account').capitalize
+          %th.text-right= t('text.amount').capitalize
+      - register.reverse_each do |entry|
+        - v = amount_signed(entry['amount'], account)
+        %tr
+          %td= entry['date'].strftime(settings.date_format)
+          %td= entry['payee']
+          %td= entry['account']
+          %td.text-right<
+            %span{class: v >= 0 ? 'text-success' : 'text-danger'}= money(v)
+      %tr
+        %td.text-right{colspan: 4}
+          %span Total: 
+          - total = amount_signed(register.sum { |e| e['amount'] }, register.first['account'])
+          %span{class: total >= 0 ? 'text-success' : 'text-danger'}= money(total)

@@ -86,6 +86,14 @@ helpers do
                               :format => settings.currency_format)
     end
 
+    def amount_signed(v, account)
+        account.start_with?(settings.assets) ? v : -v
+    end
+
+    def money_signed(v, account)
+        money(amount_signed(v, account))
+    end
+
     def highcharts_serie(history, negate = false)
         decimal_format = "%.#{settings.decimals}f"
         factor = negate ? -1 : 1
@@ -112,18 +120,48 @@ get "/" do
     summary = assets.summary
     summary.accumulate
 
-    balances = [[settings.assets, assets.monthly_balances()]] + accounts.map { |a| [a, assets.for_account(a).monthly_balances() ] }
-    variations = [ [settings.assets, assets.monthly_subtotals()] ]
+    monthly_register = assets.monthly_register
+    monthly_register.each { |monthly| monthly[1].sort_by! { |e| e['date'] } }
 
-    haml :index, :layout => :main_layout, locals: {summary: summary, balances: balances, variations: variations, account_title: settings.assets}
+    monthly_subtotals = assets.monthly_subtotals(monthly_register)
+
+    balances = [[settings.assets, assets.monthly_balances(monthly_subtotals)]] + accounts.map { |a| [a, assets.for_account(a).monthly_balances() ] }
+    variations = [ [settings.assets, monthly_subtotals] ]
+
+    haml :index, :layout => :main_layout, locals: {account: settings.assets,
+                                                   summary: summary,
+                                                   balances: balances,
+                                                   variations: variations,
+                                                   account_title: settings.assets,
+                                                   monthly_register: monthly_register.last(2)}
 end
 
-get "/#{I18n.t 'text.account', locale: settings.locale}/:name" do |account|
+get "/account/:account" do |account|
     account_journal = journal().for_account(account)
 
     summary = account_journal.summary
     summary.accumulate
 
-    variations = [ [account, account_journal.monthly_subtotals()] ]
-    haml :account_details, :layout => :main_layout, locals: {account: account, summary: summary, variations: variations}
+    monthly_register = account_journal.monthly_register
+    monthly_register.each { |monthly| monthly[1].sort_by! { |e| e['date'] } }
+
+    variations = [ [account, account_journal.monthly_subtotals(monthly_register)] ]
+    haml :account_details, :layout => :main_layout, locals: {account: account,
+                                                             summary: summary,
+                                                             variations: variations,
+                                                             monthly_register: monthly_register.last(2)}
+end
+
+get "/transactions/:account" do |account|
+    account_journal = journal().for_account(account)
+
+    summary = account_journal.summary
+    summary.accumulate
+
+    monthly_register = account_journal.monthly_register
+    monthly_register.each { |monthly| monthly[1].sort_by! { |e| e['date'] } }
+
+    haml :transactions, :layout => :main_layout, locals: {account: account,
+                                                          summary: summary,
+                                                          monthly_register: monthly_register}
 end

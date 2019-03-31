@@ -7,5 +7,5 @@
       - cls.push "treegrid-parent-#{treegrid_parents[a[:level] - 1]}"
     %tr{:class => cls}<
       %td<
-        %a{href: url("/#{t 'text.account'}/#{a[:fullname]}")} #{a[:name]}
+        %a{href: url("/#{page}/#{a[:fullname]}")} #{a[:name]}
       %td.money> #{money(a[:amount])}
