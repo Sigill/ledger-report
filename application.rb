@@ -86,17 +86,20 @@ helpers do
                               :format => settings.currency_format)
     end
 
-    def highcharts_serie(history)
+    def highcharts_serie(history, negate = false)
         decimal_format = "%.#{settings.decimals}f"
-        history.map{ |hist| "[#{hist[0].strftime('%Q')}, #{decimal_format % hist[1]}]" }.join(", ")
+        factor = negate ? -1 : 1
+        history.map{ |hist|
+            "[#{hist[0].strftime('%Q')}, #{decimal_format % (factor * hist[1])}]"
+        }.join(", ")
     end
 
-    def highcharts_series(balances)
+    def highcharts_series(balances, negate = false)
         s = ""
         balances.map { |account, history|
             "{\n" +
             "  name: '#{account}',\n" +
-            "  data: [ " + highcharts_serie(history) + " ]" +
+            "  data: [ " + highcharts_serie(history, negate) + " ]" +
             "\n}"
         }.join(",\n")
     end
@@ -110,8 +113,9 @@ get "/" do
     summary.accumulate
 
     balances = [[settings.assets, assets.monthly_balances()]] + accounts.map { |a| [a, assets.for_account(a).monthly_balances() ] }
+    variations = [ [settings.assets, assets.monthly_subtotals()] ]
 
-    haml :index, :layout => :main_layout, locals: {summary: summary, balances: balances, account_title: settings.assets}
+    haml :index, :layout => :main_layout, locals: {summary: summary, balances: balances, variations: variations, account_title: settings.assets}
 end
 
 get "/#{I18n.t 'text.account', locale: settings.locale}/:name" do |account|
@@ -120,6 +124,6 @@ get "/#{I18n.t 'text.account', locale: settings.locale}/:name" do |account|
     summary = account_journal.summary
     summary.accumulate
 
-    variations = [ [account, account_journal.uncleared.monthly_subtotals()] ]
-    haml :account_details, :layout => :main_layout, locals: {account_title: account, summary: summary, variations: variations}
+    variations = [ [account, account_journal.monthly_subtotals()] ]
+    haml :account_details, :layout => :main_layout, locals: {account: account, summary: summary, variations: variations}
 end

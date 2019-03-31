@@ -26,8 +26,10 @@
           %a.navbar-brand{href: url('/')} Ledger
         .collapse.navbar-collapse#navbar
           %ul.nav.navbar-nav
-            %li.active<
+            %li<
               %a{href: url("/")} #{t 'text.assets'}
+            %li<
+              %a{href: url("/#{t 'text.account'}/#{settings.incomes}")} #{t 'text.incomes'}
             %li<
               %a{href: url("/#{t 'text.account'}/#{settings.expenses}")} #{t 'text.expenses'}
     .container-fluid

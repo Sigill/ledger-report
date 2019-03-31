@@ -3,6 +3,7 @@ fr:
     account: compte
     assets: Actifs
     expenses: Dépenses
+    incomes: Recettes
     balance: Balance
     cash_flow: Variations mensuelles
     punct_sep: '\u00A0'

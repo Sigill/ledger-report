@@ -3,6 +3,7 @@ en:
     account: account
     assets: Assets
     expenses: Expenses
+    incomes: Incomes
     balance: Balance
     cash_flow: Cash flow
     punct_sep: ''

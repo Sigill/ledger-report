@@ -2,11 +2,15 @@
   .col-xs-12.col-md-8.col-md-offset-2.page-header
     %h1.text-center #{h account_title}
 
-%div.row
-  %div.col-md-4
+.row
+  .col-md-4
     = haml :treegrid_account, :locals => {:summary => summary}
 
-  %div.col-md-8.accounts_balances
+  .col-md-8
+    .row
+      .accounts_balances
+    .row
+      .accounts_variations
 
 = haml :highcharts_global
 
@@ -39,10 +43,48 @@
           marker: {
             enabled: true
           }
+        },
+        series: {
+          animation: false
         }
       },
       series: [
         #{highcharts_series(balances)}
+      ]
+    });
+
+    $('.accounts_variations').highcharts({
+      chart: { type: 'column' },
+      title: { text: '#{t 'text.cash_flow'}' },
+      credits: { enabled: false },
+      xAxis: {
+        type: 'datetime',
+        dateTimeLabelFormats: { day: '#{t 'date.formats.month_and_year'}', month: '#{t 'date.formats.month_and_year'}', year: '#{t 'date.formats.month_and_year'}' },
+        title: { text: null }
+      },
+      yAxis: {
+        title: { text: null },
+      },
+      tooltip: {
+        headerFormat: '<b>{series.name}</b><br>',
+        valueDecimals: #{settings.decimals},
+        valuePrefix: '#{h settings.value_prefix}',
+        valueSuffix: '#{h settings.value_suffix}',
+        pointFormat: '{point.x:#{t 'date.formats.long'}}#{t 'text.punct_sep'}: {point.y}'
+      },
+      legend: { enabled: false },
+      plotOptions: {
+        spline: {
+          marker: {
+            enabled: true
+          }
+        },
+        series: {
+          animation: false
+        }
+      },
+      series: [
+        #{highcharts_series(variations, false)}
       ]
     });
   });
