@@ -5,7 +5,6 @@ ledger_file: /path/to/your/account.ledger
 assets: Assets
 expenses: Expenses
 incomes: Incomes
-legacy: Legacy funds
 
 # For translations
 locale: en
