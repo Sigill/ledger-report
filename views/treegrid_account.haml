@@ -8,4 +8,4 @@
     %tr{:class => cls}<
       %td<
         %a{href: url("/#{page}/#{a[:fullname]}")} #{a[:name]}
-      %td.money> #{money(a[:amount])}
+      %td.money> #{money_signed(a[:amount], account)}

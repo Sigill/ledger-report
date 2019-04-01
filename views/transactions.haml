@@ -4,7 +4,7 @@
 
 .row
   .col-md-4
-    = haml :treegrid_account, :locals => {summary: summary, page: 'transactions'}
+    = haml :treegrid_account, :locals => {account: account, summary: summary, page: 'transactions'}
 
   .col-md-8
     = haml :transactions_table, :locals => {monthly_register: monthly_register, account: account}
