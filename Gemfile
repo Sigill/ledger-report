@@ -7,6 +7,7 @@ gem 'rack', '~> 2.0.0'
 gem 'haml', '~> 5.0.0'
 gem 'actionview', '~> 5.2.3'
 gem 'i18n', '~> 0.7'
+gem 'moving_average', '~> 0.1.1'
 
 group :development do
 	gem 'byebug'

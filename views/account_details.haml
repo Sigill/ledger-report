@@ -23,7 +23,6 @@
     $('.tree').treegrid();
 
     $('.accounts_variations').highcharts({
-      chart: { type: 'column' },
       title: { text: '#{t 'text.cash_flow'}' },
       credits: { enabled: false },
       xAxis: {
@@ -33,6 +32,8 @@
       },
       yAxis: {
         title: { text: null },
+        min: #{account.start_with?(settings.incomes) ? 'undefined' : [variations.first[1].max_by { |e| e[1] }[1], -3000].min()},
+        max: #{account.start_with?(settings.expenses) ? 'undefined' : [variations.first[1].min_by { |e| e[1] }[1], 5000].max()},
       },
       tooltip: {
         headerFormat: '<b>{series.name}</b><br>',
@@ -45,7 +46,7 @@
       plotOptions: {
         spline: {
           marker: {
-            enabled: true
+            enabled: false
           }
         },
         series: {
@@ -53,7 +54,8 @@
         }
       },
       series: [
-        #{highcharts_series(variations, !account.start_with?(settings.assets))}
+        #{highcharts_series(variations, negate: !account.start_with?(settings.assets), chart_type: 'column')},
+        #{highcharts_series(variations, negate: !account.start_with?(settings.assets), avg_type: :ema, avg_tail: 12, chart_type: 'spline')}
       ]
     });
   });

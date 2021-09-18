@@ -27,7 +27,6 @@
     $('.tree').treegrid();
 
     $('.accounts_balances').highcharts({
-      chart: { type: 'spline' },
       title: { text: '#{t 'text.balance'}' },
       credits: { enabled: false },
       xAxis: {
@@ -36,7 +35,9 @@
         title: { text: null }
       },
       yAxis: {
-        title: { text: null }
+        title: { text: null },
+        min: 0,
+        max: 200000,
       },
       tooltip: {
         headerFormat: '<b>{series.name}</b><br>',
@@ -57,12 +58,11 @@
         }
       },
       series: [
-        #{highcharts_series(balances)}
+        #{highcharts_series(balances, chart_type: 'spline')}
       ]
     });
 
     $('.accounts_variations').highcharts({
-      chart: { type: 'column' },
       title: { text: '#{t 'text.cash_flow'}' },
       credits: { enabled: false },
       xAxis: {
@@ -72,6 +72,8 @@
       },
       yAxis: {
         title: { text: null },
+        min: -2000,
+        max: 3000,
       },
       tooltip: {
         headerFormat: '<b>{series.name}</b><br>',
@@ -84,7 +86,7 @@
       plotOptions: {
         spline: {
           marker: {
-            enabled: true
+            enabled: false
           }
         },
         series: {
@@ -92,7 +94,8 @@
         }
       },
       series: [
-        #{highcharts_series(variations, false)}
+        #{highcharts_series(variations, negate: false, chart_type: 'column')},
+        #{highcharts_series(variations, negate: false, avg_type: :ema, avg_tail: 6, chart_type: 'spline')}
       ]
     });
   });

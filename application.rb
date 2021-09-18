@@ -13,6 +13,7 @@ require 'shellwords'
 require 'open3'
 require 'i18n'
 require 'i18n/backend/fallbacks'
+require 'moving_average'
 
 require 'action_view'
 require 'action_view/helpers'
@@ -53,8 +54,7 @@ helpers do
     def journal
         unless Cache.cached(:journal, @journal_current_hash)
             puts "Caching journal"
-            cmd = [settings.ledger_cmd, "-f", settings.ledger_file, "--input-date-format", settings.date_format, "csv"].shelljoin
-            stdout, stdeerr, status = Open3.capture3(cmd)
+            stdout, stderr, status = Open3.capture3(settings.ledger_cmd, "-f", settings.ledger_file, "--input-date-format", settings.date_format, "csv")
             stdout.force_encoding("UTF-8")
             Cache.cache(:journal, Journal::from_csv(stdout), @journal_current_hash)
         end
@@ -94,20 +94,43 @@ helpers do
         money(amount_signed(v, account))
     end
 
-    def highcharts_serie(history, negate = false)
+    def postprocess_series(history, negate, avg_type, avg_tail)
+        history = history.map { |e| [e[0], -e[1]] } if negate
+
+        return history if avg_tail == 1
+
+        values = history.map { |e| e[1] }
+        return history.each_with_index.map { |kv, i|
+            tail = i < avg_tail ? i+1 : avg_tail
+            [
+                kv[0],
+                case avg_type
+                when :sma
+                    values.sma(i, tail)
+                when :ema
+                    values.ema(i, tail)
+                when :wma
+                    values.wma(i, tail)
+                end
+            ]
+        }
+    end
+
+    def highcharts_serie(history, negate, avg_type, avg_tail)
+        history = postprocess_series(history, negate, avg_type, avg_tail)
         decimal_format = "%.#{settings.decimals}f"
-        factor = negate ? -1 : 1
         history.map{ |hist|
-            "[#{hist[0].strftime('%Q')}, #{decimal_format % (factor * hist[1])}]"
+            "[#{hist[0].strftime('%Q')}, #{decimal_format % hist[1]}]"
         }.join(", ")
     end
 
-    def highcharts_series(balances, negate = false)
+    def highcharts_series(balances, negate: false, avg_type: :sma, avg_tail: 1, chart_type: 'line')
         s = ""
         balances.map { |account, history|
             "{\n" +
             "  name: '#{account}',\n" +
-            "  data: [ " + highcharts_serie(history, negate) + " ]" +
+            "  data: [ " + highcharts_serie(history, negate, avg_type, avg_tail) + " ]\n," +
+            "  type: '#{chart_type}'\n" +
             "\n}"
         }.join(",\n")
     end
