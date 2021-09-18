@@ -43,7 +43,7 @@ class Journal
     def self.from_csv_arr(arr)
         transactions = arr.map {|a| Hash[ Journal::CSV_FIELDS.zip(a) ] }
         transactions.each { |t|
-            t['amount'] = BigDecimal.new(t['amount'])
+            t['amount'] = BigDecimal(t['amount'])
             d = t['date'].split('/')
             d.map! { |v| v.to_i }
             t['date'] = Date.new(d[0], d[1], d[2])
@@ -145,7 +145,7 @@ class AccountTree
         def initialize(name)
             @name = name
             @nodes = []
-            @amount = BigDecimal.new(0)
+            @amount = BigDecimal(0)
         end
 
         def push(a)
