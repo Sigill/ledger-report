@@ -4,6 +4,17 @@ require 'csv'
 require 'set'
 require 'bigdecimal'
 
+class Float
+    # Returns true if a float has a fractional part; i.e. <tt>f == f.to_i</tt>
+    def fractional_part?
+      fractional_part != 0.0
+    end
+
+    # Returns the fractional part of a float. For example, <tt>(6.67).fractional_part == 0.67</tt>
+    def fractional_part
+      (self - self.truncate).abs
+    end
+end
 
 class Array
     def cumulative_sum
@@ -19,6 +30,25 @@ class Array
             i += 1
         end
         return i
+    end
+
+    # https://github.com/bkoski/array_stats/pull/3
+    def percentile p
+        sorted_array = self.sort
+        rank = (p.to_f / 100) * (self.length + 1)
+
+        return nil if self.length == 0
+
+        if rank.truncate > 0 && rank.truncate < self.length
+            sample_0 = sorted_array[rank.truncate - 1]
+            sample_1 = sorted_array[rank.truncate]
+
+            (rank.fractional_part * (sample_1 - sample_0)) + sample_0
+        elsif rank.truncate == 0
+            sorted_array.first.to_f
+        elsif rank.truncate == self.length
+            sorted_array.last.to_f
+        end
     end
 end
 
@@ -89,9 +119,24 @@ class Journal
     end
 
     def monthly_register
-        register = @transactions.group_by{ |t| first_of_the_month(t["date"]) }.to_a
+        register = @transactions.group_by{ |t| first_of_the_month(t['date']) }.to_a
         register.sort_by! { |e| e[0] }
+        register.each { |m, transactions| transactions.sort_by! { |e| e['date'] } }
         register
+    end
+
+    def self.make_dense_register(_monthly_register)
+        dense_register = _monthly_register.dup
+        _monthly_register.each_cons(2) { |a, b|
+            n = a[0].next_month()
+            while n != b[0]
+                dense_register << [n, []]
+                n = n.next_month()
+            end
+        }
+
+        dense_register.sort_by! { |e| e[0] }
+        dense_register
     end
 
     def monthly_subtotals(_monthly_register = monthly_register())

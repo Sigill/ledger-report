@@ -129,7 +129,7 @@ helpers do
         balances.map { |account, history|
             "{\n" +
             "  name: '#{account}',\n" +
-            "  data: [ " + highcharts_serie(history, negate, avg_type, avg_tail) + " ]\n," +
+            "  data: [ " + highcharts_serie(history, negate, avg_type, avg_tail) + " ],\n" +
             "  type: '#{chart_type}'\n" +
             "\n}"
         }.join(",\n")
@@ -149,12 +149,23 @@ get "/" do
     monthly_subtotals = assets.monthly_subtotals(monthly_register)
 
     balances = [[settings.assets, assets.monthly_balances(monthly_subtotals)]] + accounts.map { |a| [a, assets.for_account(a).monthly_balances() ] }
-    variations = [ [settings.assets, monthly_subtotals] ]
+    variations = [ ['Total', monthly_subtotals] ]
+
+    expenses = [[
+        settings.expenses,
+        assets.monthly_subtotals(journal().for_account(settings.expenses).monthly_register())
+    ]]
+    incomes = [[
+        settings.incomes,
+        assets.monthly_subtotals(journal().for_account(settings.incomes).monthly_register())
+    ]]
 
     haml :index, :layout => :main_layout, locals: {account: settings.assets,
                                                    summary: summary,
                                                    balances: balances,
                                                    variations: variations,
+                                                   expenses: expenses,
+                                                   incomes: incomes,
                                                    account_title: settings.assets,
                                                    monthly_register: monthly_register.last(2)}
 end
@@ -165,10 +176,9 @@ get "/account/:account" do |account|
     summary = account_journal.summary
     summary.accumulate
 
-    monthly_register = account_journal.monthly_register
-    monthly_register.each { |monthly| monthly[1].sort_by! { |e| e['date'] } }
+    monthly_register = account_journal.monthly_register()
 
-    variations = [ [account, account_journal.monthly_subtotals(monthly_register)] ]
+    variations = [ [account, account_journal.monthly_subtotals(Journal.make_dense_register(monthly_register))] ]
     haml :account_details, :layout => :main_layout, locals: {account: account,
                                                              summary: summary,
                                                              variations: variations,
@@ -182,7 +192,6 @@ get "/transactions/:account" do |account|
     summary.accumulate
 
     monthly_register = account_journal.monthly_register
-    monthly_register.each { |monthly| monthly[1].sort_by! { |e| e['date'] } }
 
     haml :transactions, :layout => :main_layout, locals: {account: account,
                                                           summary: summary,

@@ -22,6 +22,12 @@
 
 = haml :highcharts_global
 
+- expenses_values = expenses.first[1].map{|e| e[1] * -1}
+- incomes_values = incomes.first[1].map{|e| e[1] * -1}
+- variations_values = variations.first[1].map{|e| e[1]}
+- values = [*expenses_values, *incomes_values, *variations_values].sort()
+- bounds = [ [values.percentile(5), 0].min(), [values.percentile(95), 0].max() ]
+
 :javascript
   $(document).ready(function() {
     $('.tree').treegrid();
@@ -37,7 +43,7 @@
       yAxis: {
         title: { text: null },
         min: 0,
-        max: 200000,
+        max: 150000,
       },
       tooltip: {
         headerFormat: '<b>{series.name}</b><br>',
@@ -72,8 +78,8 @@
       },
       yAxis: {
         title: { text: null },
-        min: -2000,
-        max: 3000,
+        min: #{bounds[0]},
+        max: #{bounds[1]},
       },
       tooltip: {
         headerFormat: '<b>{series.name}</b><br>',
@@ -82,9 +88,14 @@
         valueSuffix: '#{h settings.value_suffix}',
         pointFormat: '{point.x:#{t 'date.formats.long'}}#{t 'text.punct_sep'}: {point.y}'
       },
-      legend: { enabled: false },
+      legend: { enabled: true },
       plotOptions: {
         spline: {
+          marker: {
+            enabled: false
+          }
+        },
+        line: {
           marker: {
             enabled: false
           }
@@ -93,9 +104,12 @@
           animation: false
         }
       },
+      colors: ['#FF0000', '#00FF00', '#0000FF', '#000000'],
       series: [
-        #{highcharts_series(variations, negate: false, chart_type: 'column')},
-        #{highcharts_series(variations, negate: false, avg_type: :ema, avg_tail: 6, chart_type: 'spline')}
+        #{highcharts_series(expenses, negate: true, chart_type: 'column')},
+        #{highcharts_series(incomes, negate: true, chart_type: 'column')},
+        #{highcharts_series(variations, negate: false, chart_type: 'line')},
+        #{highcharts_series(variations, negate: false, avg_type: :sma, avg_tail: 6, chart_type: 'line')}
       ]
     });
   });
