@@ -15,11 +15,12 @@
         %tr
           %td= entry['date'].strftime(settings.date_format)
           %td= entry['payee']
-          %td= entry['account']
+          %td
+            %a{href: url("/account/#{entry['account']}")}= entry['account']
           %td.text-right<
             %span{class: v >= 0 ? 'text-success' : 'text-danger'}= money(v)
       %tr
         %td.text-right{colspan: 4}
-          %span Total: 
+          %span Total:
           - total = amount_signed(register.sum { |e| e['amount'] }, register.first['account'])
           %span{class: total >= 0 ? 'text-success' : 'text-danger'}= money(total)
