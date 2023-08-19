@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
-gem 'sinatra', '~> 2.2'
-gem 'sinatra-contrib', '~> 2.2'
+gem 'sinatra', '~> 3.1'
+gem 'sinatra-contrib', '~> 3.1'
 gem 'thin', '~> 1.8.0'
 gem 'rack', '~> 2.2'
 gem 'haml', '~> 5.2'
