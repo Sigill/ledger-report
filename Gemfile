@@ -8,6 +8,7 @@ gem 'haml', '~> 5.2'
 gem 'actionview', '~> 7.0.0'
 gem 'i18n', '~> 1.0'
 gem 'moving_average', '~> 0.1.1'
+gem 'mini_portile2', '~> 2.8' # Who knows why passenger needs that.
 
 group :development do
 	gem 'byebug'

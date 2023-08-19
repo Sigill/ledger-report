@@ -85,6 +85,7 @@ DEPENDENCIES
   byebug
   haml (~> 5.2)
   i18n (~> 1.0)
+  mini_portile2 (~> 2.8)
   moving_average (~> 0.1.1)
   rack (~> 2.2)
   rerun
