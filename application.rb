@@ -66,8 +66,8 @@ helpers do
         Rack::Utils.escape_html(text)
     end
 
-    def t(*args)
-        I18n.translate(*args)
+    def t(*args, **kwargs)
+        I18n.translate(*args, **kwargs)
     end
 
     def l(*args)
